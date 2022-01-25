@@ -14,7 +14,7 @@ def create_app():
     DB.init_app(app)
 
     @app.route("/")
-    def hello_world():
+    def home_page():
         users = User.query.all()
         print(users)
         return render_template('base.html', title='Home', users=users)
