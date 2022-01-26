@@ -17,6 +17,8 @@ def create_app():
 
     @app.route("/")
     def home_page():
+        DB.drop_all()
+        DB.create_all()
         # query for all users in the database
         users = User.query.all()
         print(users)
