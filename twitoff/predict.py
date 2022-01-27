@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from .twitter import vectorize_tweet
 
-def predict_user(user0_username, user1_username, hypto_tweet_text):
+def predict_user(user0_username, user1_username, hypo_tweet_text):
     '''
     Determine and returns which user is more likely to say a give tweet
     '''
@@ -34,6 +34,6 @@ def predict_user(user0_username, user1_username, hypto_tweet_text):
     hypo_tweet_text = vectorize_tweet(hypo_tweet_text)
 
     # Generate a prediction
-    prediction = log_reg.predict([hypto_tweet_text])
+    prediction = log_reg.predict([hypo_tweet_text])
 
     return prediction[0]

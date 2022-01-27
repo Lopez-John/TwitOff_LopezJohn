@@ -18,10 +18,7 @@ def create_app():
 
     @app.route("/")
     def home_page():
-        DB.drop_all()
-        DB.create_all()
         # query for all users in the database
-        print(users)
         return render_template('base.html',
                                 title='Home',
                                 users=User.query.all())
@@ -48,14 +45,14 @@ def create_app():
         # so that they're ready to be used (inserted into)
         DB.create_all()
 
-        return render_template('base.html', title='Reset Database')
+        return render_template('base.html', title='Database has been reset')
 
     @app.route('/user', methods=['POST'])
     @app.route('/user/<username>', methods=['GET'])
     def user(username=None, message=''):
         username = username or request.values['user_name']
         try:
-            if request.method='POST'
+            if request.method == 'POST':
                 add_or_update_user(username)
                 message = f"User {username} Successfully added!"
             tweets = user.query.filter(User.username == username).one().tweets
@@ -66,7 +63,8 @@ def create_app():
 
     @app.route('/compare',methods=['POST'])
     def compare():
-        user0, user1 = sorted([request.values['user0'], request.values['user1']])
+        user0, user1 = sorted(
+            [request.values['user0'], request.values['user1']])
         if user0 == user1:
             message = 'Cannot compare a user to themselves!'
         else:
