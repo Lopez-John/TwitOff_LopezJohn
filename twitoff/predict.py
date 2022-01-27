@@ -1,7 +1,14 @@
+'''
+Uses Logistic Regression to determine if a given tweet
+is more likely to be tweeted out by one user
+over the other
+'''
+
 from .models import User
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from .twitter import vectorize_tweet
+
 
 def predict_user(user0_username, user1_username, hypo_tweet_text):
     '''
@@ -15,11 +22,11 @@ def predict_user(user0_username, user1_username, hypo_tweet_text):
     user0_vects = np.array([tweet.vect for tweet in user0.tweets])
     user1_vects = np.array([tweet.vect for tweet in user1.tweets])
 
-    #Combine the two user's word embeddings into one big *2D* numpy array
+    # Combine the two user's word embeddings into one big *2D* numpy array
     # This is essentially our X matrix for training out logistic regression
     vects = np.vstack([user0_vects, user1_vects])
-    
-    # Create a np array to represent the y vector 
+
+    # Create a np array to represent the y vector
     # Indicate which user was the author of given word embedding
     labels = np.concatenate([np.zeros(len(user0.tweets)),
                             np.ones(len(user1.tweets))])

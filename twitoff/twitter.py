@@ -1,3 +1,8 @@
+'''
+Accesses the Twitter API to receive or updates a user's
+tweets in the database
+'''
+
 from os import getenv
 import tweepy
 from .models import DB, Tweet, User
@@ -15,6 +20,7 @@ TWITTER = tweepy.API(TWITTER_AUTH)
 
 
 def add_or_update_user(username):
+
     try:
         twitter_user = TWITTER.get_user(screen_name=username)
 
@@ -36,11 +42,12 @@ def add_or_update_user(username):
         # Get all of a user's tweets if they're a new user
         # Get only their most recent tweets if the user
         # is already in the DB.
-        tweets = twitter_user.timeline(count=200,
-                                       exclude_replies=True,
-                                       include_rts=False,
-                                       tweet_mode='extended',
-                                       since_id=db_user.newest_tweet_id)
+        tweets = twitter_user.timeline(
+                                        count=200,
+                                        exclude_replies=True,
+                                        include_rts=False,
+                                        tweet_mode='extended',
+                                        since_id=db_user.newest_tweet_id)
 
         if tweets:
             db_user.newest_tweet_id = tweets[0].id
@@ -49,10 +56,11 @@ def add_or_update_user(username):
         # one by one
         for tweet in tweets:
             tweet_vector = vectorize_tweet(tweet.full_text)
-            db_tweet = Tweet(id=tweet.id,
-                             text=tweet.full_text[:300],
-                             user_id=db_user.id,
-                             vect=tweet_vector)
+            db_tweet = Tweet(
+                            id=tweet.id,
+                            text=tweet.full_text[:300],
+                            user_id=db_user.id,
+                            vect=tweet_vector)
             DB.session.add(db_tweet)
     except Exception as error:
         print(f'Error when processing {username}: {error}')
